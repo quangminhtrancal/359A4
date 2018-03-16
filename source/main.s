@@ -19,7 +19,9 @@ main:
 	// left:  1111111110111111
 	// right: 1111111101111111
 	
+	bl draw
 	
+/*
 ask:
       
 	mov 		r0 , #50000		@ delay program for 50, 000 ms
@@ -33,6 +35,7 @@ ask:
 	bl drawc
 	
 	b ask
+*/
 
 	@ stop
 	haltLoop$:
