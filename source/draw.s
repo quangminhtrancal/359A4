@@ -67,7 +67,9 @@ looprow:
 	addlt r7, #1
 	blt loopcol
 
-	pop		{r4-r9, pc}
+	pop		{r4-r9, pc}
+
+
 @ Data section
 .section .data
 
