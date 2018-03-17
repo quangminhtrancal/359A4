@@ -15,6 +15,11 @@ int return_border2(int offset_color);
 int return_whitebrick(int offset_color);
 int return_paddle(int offset_color);
 
+int paddlex;
+int paddley;
+int ballx;
+int bally;
+
 // Size of ball is 20x20
 void drawball(int x, int y, int lx, int ly){
 	
@@ -26,6 +31,23 @@ void drawball(int x, int y, int lx, int ly){
 	for (int i=0;i<ly;i++){
 		for (int j=0; j<lx; j++){
 			color=return_ball(offset_color);
+			DrawPixel(x+j,y+i,color);
+			offset_color+=4;
+		}
+	}
+	
+}
+
+void clearball(int x, int y, int lx, int ly){
+	
+	//	te();
+		
+	int offset_color=0;
+	int color=0;
+
+	for (int i=0;i<ly;i++){
+		for (int j=0; j<lx; j++){
+			color=return_bg(offset_color);
 			DrawPixel(x+j,y+i,color);
 			offset_color+=4;
 		}
@@ -51,7 +73,7 @@ void drawpaddle(int x, int y, int lx, int ly){
 	
 }
 
-void clearball(int x, int y, int lx, int ly){
+void clearpaddle(int x, int y, int lx, int ly){
 	
 	//	te();
 		
@@ -67,6 +89,7 @@ void clearball(int x, int y, int lx, int ly){
 	}
 	
 }
+
 
 void drawredbrick(int x, int y, int lx, int ly){
 	
@@ -256,8 +279,18 @@ void drabdH(int startx, int starty, int lx, int ly){
 	}
 }
 
+void leftmove(){
+	clearpaddle(paddlex,paddley,80,20);
+	if (paddlex>500) paddlex-=10;
+	
+	drawpaddle(paddlex,paddley,80,20);
+}
 
-
+void rightmove(){
+	clearpaddle(paddlex,paddley,80,20);
+	if (paddlex<1020) paddlex+=10;
+	drawpaddle(paddlex,paddley,80,20);
+}
 
 
 void draw(){
@@ -272,6 +305,11 @@ void draw(){
 	drabdV(1100,200,20,100);
 	drawpaddle(760,750,80,20);
 	drawball(790,730,20,20);
+	
+	paddlex=760;
+	paddley=750;
+	ballx=790;
+	bally=730; 
 	/*
 	int startx=600;
 	int starty=300;
@@ -283,7 +321,28 @@ void draw(){
 	*/
 	
 	int button=0xFFFF;
-	int read=readSnes();
+	int check=0;
+	int read=0;
+	while(1){
+		while (check==0){
+			read=readSnes();
+			// left button
+			if (read==65471){
+				check=1;
+				leftmove();
+				read=0xFFFF;
+			}
+			else if (read==65407){
+				check=1;
+				rightmove();
+				read=0xFFFF;
+			}
+			delay(50);
+		}
+		check=0;
+	}
+	
+	
 	
 	
 	

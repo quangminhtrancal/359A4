@@ -11,10 +11,10 @@ main:
 	bl		initSnes
 	
 
-	bl		Draw		@ Draw picture 16x16
+	//bl		Draw		@ Draw picture 16x16
 	
-	ldr	r0, =Notification
-	bl printf
+	//ldr	r0, =Notification
+	//bl printf
 	
 	// left:  1111111110111111
 	// right: 1111111101111111
