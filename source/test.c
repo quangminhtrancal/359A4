@@ -8,6 +8,11 @@ void DrawPixel(int x, int y, int color);
 int return_bg(int offset_color);
 int return_ball(int offset_color);
 int return_redbrick(int offset_color);
+int return_bluebrick(int offset_color);
+int return_greenbrick(int offset_color);
+int return_border1(int offset_color);
+int return_border2(int offset_color);
+int return_whitebrick(int offset_color);
 
 // Size of ball is 20x20
 void drawball(int x, int y, int lx, int ly){
@@ -58,10 +63,56 @@ void drawredbrick(int x, int y, int lx, int ly){
 			offset_color+=4;
 		}
 	}
-	
 }
 
-/*
+void drawgreenbrick(int x, int y, int lx, int ly){
+	
+	//	te();
+		
+	int offset_color=0;
+	int color=0;
+
+	for (int i=0;i<ly;i++){
+		for (int j=0; j<lx; j++){
+			color=return_greenbrick(offset_color);
+			DrawPixel(x+j,y+i,color);
+			offset_color+=4;
+		}
+	}
+}
+
+void drawbluebrick(int x, int y, int lx, int ly){
+	
+	//	te();
+		
+	int offset_color=0;
+	int color=0;
+
+	for (int i=0;i<ly;i++){
+		for (int j=0; j<lx; j++){
+			color=return_bluebrick(offset_color);
+			DrawPixel(x+j,y+i,color);
+			offset_color+=4;
+		}
+	}
+}
+
+void drawwhitebrick(int x, int y, int lx, int ly){
+	
+	//	te();
+		
+	int offset_color=0;
+	int color=0;
+
+	for (int i=0;i<ly;i++){
+		for (int j=0; j<lx; j++){
+			color=return_whitebrick(offset_color);
+			DrawPixel(x+j,y+i,color);
+			offset_color+=4;
+		}
+	}
+}
+
 // Size of border is 100x20
 void drawborderV(int x, int y, int lx, int ly){
 	
@@ -97,7 +148,7 @@ void drawborderH(int x, int y, int lx, int ly){
 	}
 	
 }
-*/
+
 
 // Size of background is 20x20
 void drawbg(int x, int y, int lx, int ly){
@@ -144,10 +195,59 @@ void drawredb(int startx, int starty, int lx, int ly){
 		increase+=60;
 	}
 }
+
+void drawgreenb(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<11;i++){
+		drawgreenbrick(startx+increase,starty,lx,ly);
+		increase+=60;
+	}
+}
+
+void drawblueb(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<11;i++){
+		drawbluebrick(startx+increase,starty,lx,ly);
+		increase+=lx;
+	}
+}
+
+void drawwhiteb(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<11;i++){
+		drawwhitebrick(startx+increase,starty,lx,ly);
+		increase+=lx;
+	}
+}
+
+// Draw border Vertical
+void drabdV(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<7;i++){
+		drawborderV(startx,starty+increase,lx,ly);
+		increase+=ly;
+	}
+}
+
+void drabdH(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<7;i++){
+		drawborderH(startx+increase,starty,lx,ly);
+		increase+=lx;
+	}
+}
+
+
 void draw(){
 	draw_totalback(500,200,20,20,20);
 
 	drawredb(500,300,60,20);
+	drawgreenb(500,320,60,20);
+	drawwhiteb(500,340,60,20);
+	drabdH(500,180,100,20);
+	drabdV(480,200,20,100);
+	drabdH(500,800,100,20);
+	drabdV(1100,200,20,100);
 	
 	
 	int startx=600;
