@@ -1,3 +1,24 @@
+
+
+// Take r0 as the offset for the image color location
+.global return_paddle
+
+return_paddle:
+	push	{r4, r5,lr}
+	ldr	r4, =paddle
+	mov	r5, r0				// save the offset
+	ldr	r0, [r4,r5]
+	
+	pop		{r4,r5,pc}
+
+.section .data
+
+.align 4
+
+	.global paddle
+
+paddle:
+
 .ascii "\373\373\376\377\374\374\372\377\254\254\254\377>?C\377! \"\377.*+\377211\377211\377211\377211\377"
 .ascii "211\377211\377211\377211\377211\377211\377211\377100\377   \377   \377"
 .ascii "\"\"\"\377111\377211\377211\377211\377211\377211\377211\377211\377211\377"
