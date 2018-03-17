@@ -7,6 +7,7 @@ void te();
 void DrawPixel(int x, int y, int color);
 int return_bg(int offset_color);
 int return_ball(int offset_color);
+int return_redbrick(int offset_color);
 
 // Size of ball is 20x20
 void drawball(int x, int y, int lx, int ly){
@@ -36,6 +37,23 @@ void clearball(int x, int y, int lx, int ly){
 	for (int i=0;i<ly;i++){
 		for (int j=0; j<lx; j++){
 			color=return_bg(offset_color);
+			DrawPixel(x+j,y+i,color);
+			offset_color+=4;
+		}
+	}
+	
+}
+
+void drawredbrick(int x, int y, int lx, int ly){
+	
+	//	te();
+		
+	int offset_color=0;
+	int color=0;
+
+	for (int i=0;i<ly;i++){
+		for (int j=0; j<lx; j++){
+			color=return_redbrick(offset_color);
 			DrawPixel(x+j,y+i,color);
 			offset_color+=4;
 		}
@@ -118,8 +136,20 @@ void draw_totalback(int startx, int starty, int lx, int ly, int increase){
 		
 	}
 }
+
+void drawredb(int startx, int starty, int lx, int ly){
+	int increase=0;
+	for (int i=1; i<11;i++){
+		drawredbrick(startx+increase,starty,lx,ly);
+		increase+=60;
+	}
+}
 void draw(){
 	draw_totalback(500,200,20,20,20);
+
+	drawredb(500,300,60,20);
+	
+	
 	int startx=600;
 	int starty=300;
 	for (int i=1; i<100;i++){
