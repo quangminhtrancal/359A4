@@ -14,6 +14,10 @@ int return_border1(int offset_color);
 int return_border2(int offset_color);
 int return_whitebrick(int offset_color);
 int return_paddle(int offset_color);
+int return_upleftedge(int offset_color);
+int return_uprightedge(int offset_color);
+int return_bottomleftedge(int offset_color);
+int return_bottomrightedge(int offset_color);
 
 int paddlex;
 int paddley;
@@ -304,6 +308,63 @@ void rightmove(int speed){
 	drawpaddle(paddlex,paddley,80,20);
 }
 
+void drawedge1(int x, int y, int lx, int ly){
+ 	int offset_color=0;
+ 	int color=0;
+ 
+ 	for (int i=0;i<ly;i++){
+ 		for (int j=0; j<lx; j++){
+ 			color=return_upleftedge(offset_color);
+ 			DrawPixel(x+j,y+i,color);
+ 			offset_color+=4;
+ 		}
+ 	}
+ 	
+ }
+ 
+ 
+ void drawedge2(int x, int y, int lx, int ly){
+ 	int offset_color=0;
+ 	int color=0;
+ 	for (int i=0;i<ly;i++){
+ 		for (int j=0; j<lx; j++){
+ 			color=return_uprightedge(offset_color);
+ 			DrawPixel(x+j,y+i,color);
+ 			offset_color+=4;
+ 		}
+ 	}
+ 	
+ }
+ 
+ void drawedge3(int x, int y, int lx, int ly){
+ 	
+ 	int offset_color=0;
+ 	int color=0;
+ 
+ 	for (int i=0;i<ly;i++){
+ 		for (int j=0; j<lx; j++){
+ 			color=return_bottomleftedge(offset_color);
+ 			DrawPixel(x+j,y+i,color);
+ 			offset_color+=4;
+ 		}
+ 	}
+ 	
+ }
+ 
+ void drawedge4(int x, int y, int lx, int ly){
+ 	
+ 	int offset_color=0;
+ 	int color=0;
+ 
+ 	for (int i=0;i<ly;i++){
+ 		for (int j=0; j<lx; j++){
+ 			color=return_bottomrightedge(offset_color);
+ 			DrawPixel(x+j,y+i,color);
+ 			offset_color+=4;
+ 		}
+ 	}
+ 	
+ }
 
 void draw(){
 	draw_totalback(500,200,20,20,20);
@@ -317,6 +378,11 @@ void draw(){
 	drabdV(1100,200,20,100);
 	drawpaddle(760,750,80,20);
 	drawball(790,730,20,20);
+	
+	drawedge1(480,180,20,20);
+ 	drawedge2(1100,180,20,20);
+ 	drawedge3(480,800,20,20);
+ 	drawedge4(1100,800,20,20);
 	
 	paddlex=760;
 	paddley=750;
@@ -365,7 +431,7 @@ void draw(){
 			else if (read==65534){
 				
 			}
-			// If A and right move is clicked
+			// If A and right move is pressed
 			else if (read==65151){
 				if (previousbutton==read){
 					count++;
@@ -382,7 +448,7 @@ void draw(){
 				speed=0;
 				previousbutton=65151;	
 			}
-			// If A and left move is clicked
+			// If A and left move is pressed
 			else if (read==65215){
 				if (previousbutton==read){
 					count++;
