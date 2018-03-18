@@ -82,7 +82,8 @@ void clearpaddle(int x, int y, int lx, int ly){
 
 	for (int i=0;i<ly;i++){
 		for (int j=0; j<lx; j++){
-			color=return_bg(offset_color);
+			//color=return_bg(offset_color);
+			color =0x00FF00;
 			DrawPixel(x+j,y+i,color);
 			offset_color+=4;
 		}
@@ -279,16 +280,27 @@ void drabdH(int startx, int starty, int lx, int ly){
 	}
 }
 
-void leftmove(){
+void leftmove(int speed){
 	clearpaddle(paddlex,paddley,80,20);
-	if (paddlex>500) paddlex-=10;
-	
+	if (paddlex>500) {
+		if (speed==0) paddlex-=1;
+		if (speed==1)	paddlex-=5;
+		if (speed==2)	paddlex-=10;
+		if (speed==3)	paddlex-=20;
+	}
+	if (paddlex<500) paddlex=500;
 	drawpaddle(paddlex,paddley,80,20);
 }
 
-void rightmove(){
+void rightmove(int speed){
 	clearpaddle(paddlex,paddley,80,20);
-	if (paddlex<1020) paddlex+=10;
+	if (paddlex<1020) {
+		if (speed==0) paddlex+=1;
+		if (speed==1)	paddlex+=5;
+		if (speed==2)	paddlex+=10;
+		if (speed==3)	paddlex+=20;	
+	}
+	if (paddlex>1020) paddlex=1020;
 	drawpaddle(paddlex,paddley,80,20);
 }
 
@@ -323,27 +335,84 @@ void draw(){
 	int button=0xFFFF;
 	int check=0;
 	int read=0;
+	int count=0;
+	int previousbutton=0;
+	int speed=0;
+
 	while(1){
 		while (check==0){
 			read=readSnes();
+			//if (read != 65535) printf("%d\n",read);
 			// left button
 			if (read==65471){
 				check=1;
-				leftmove();
+				// speed is used to check if the button is pressed repeatedly
+				speed=0;
+				leftmove(speed);
 				read=0xFFFF;
+				speed=0;
 			}
+			// right button is clicked
 			else if (read==65407){
 				check=1;
-				rightmove();
+				// speed is used to check if the button is pressed repeatedly
+				speed=0;
+				rightmove(speed);
 				read=0xFFFF;
+				speed=0;
 			}
+			// if B button is pressed- ball release
+			else if (read==65534){
+				
+			}
+			// If A and right move is clicked
+			else if (read==65151){
+				if (previousbutton==read){
+					count++;
+					if ((count>=10) && (count<=20)) speed=1;
+					if ((count>20)&& (count<=30)) speed=2;
+					if (count>30)	speed=3;
+				}
+				if (previousbutton!=read) {
+					count=0;
+				}
+
+				rightmove(speed);
+				read=0xFFFF;
+				speed=0;
+				previousbutton=65151;	
+			}
+			// If A and left move is clicked
+			else if (read==65215){
+				if (previousbutton==read){
+					count++;
+					if ((count>=10) && (count<=20)) speed=1;
+					if ((count>20)&& (count<=30)) speed=2;
+					if (count>30)	speed=3;
+				}
+				if (previousbutton!=read) {
+					count=0;
+				}
+
+				leftmove(speed);
+				read=0xFFFF;
+				speed=0;
+				previousbutton=65215;	
+			}
+
 			delay(50);
+			
 		}
 		check=0;
 	}
 	
 	
-	
+	//A- 65279
+	//B- 65534
+	//Select- 65531
+	// Start-65527
+	// up pad
+	// down pad
 	
 	
 }
