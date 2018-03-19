@@ -18,6 +18,34 @@ int return_upleftedge(int offset_color);
 int return_uprightedge(int offset_color);
 int return_bottomleftedge(int offset_color);
 int return_bottomrightedge(int offset_color);
+ void moveball(int startx, int starty);
+
+int originx=500;
+int originy=100;
+
+int width_bg=800;
+int height_bg=800;
+
+int startbrick_y=90;
+//int startpaddle_y=750;
+//int startball_y=startpaddle_y-20;
+
+int width_ball=20;
+int height_ball=20;
+int width_paddle=80;
+int height_paddle=20;
+int width_brick=60;
+int height_brick=20;
+int width_Vborder=20;
+int height_Vborder=100;
+int width_Hborder=100;
+int height_Hborder=20;
+
+int width_bggame=600;
+int height_bggame=600;
+
+int paddlegap=30;
+int brickgap=90;
 
 int paddlex;
 int paddley;
@@ -285,27 +313,27 @@ void drabdH(int startx, int starty, int lx, int ly){
 }
 
 void leftmove(int speed){
-	clearpaddle(paddlex,paddley,80,20);
-	if (paddlex>500) {
+	clearpaddle(paddlex,paddley,width_paddle,height_paddle);
+	if (paddlex>originx) {
 		if (speed==0) paddlex-=1;
 		if (speed==1)	paddlex-=5;
 		if (speed==2)	paddlex-=10;
 		if (speed==3)	paddlex-=20;
 	}
-	if (paddlex<500) paddlex=500;
-	drawpaddle(paddlex,paddley,80,20);
+	if (paddlex<originx) paddlex=originx;
+	drawpaddle(paddlex,paddley,width_paddle,height_paddle);
 }
 
 void rightmove(int speed){
-	clearpaddle(paddlex,paddley,80,20);
-	if (paddlex<1020) {
+	clearpaddle(paddlex,paddley,width_paddle,height_paddle);
+	if (paddlex<(originx+width_bg-width_paddle)) {
 		if (speed==0) paddlex+=1;
 		if (speed==1)	paddlex+=5;
 		if (speed==2)	paddlex+=10;
 		if (speed==3)	paddlex+=20;	
 	}
-	if (paddlex>1020) paddlex=1020;
-	drawpaddle(paddlex,paddley,80,20);
+	if (paddlex>(originx+width_bggame-width_paddle)) paddlex=originx+width_bggame-width_paddle;
+	drawpaddle(paddlex,paddley,width_paddle,height_paddle);
 }
 
 void drawedge1(int x, int y, int lx, int ly){
@@ -365,48 +393,54 @@ void drawedge1(int x, int y, int lx, int ly){
  	}
  	
  }
+ 
+
 
 void draw(){
-	draw_totalback(500,200,20,20,20);
+	
+	paddlex=originx+width_bggame/2-width_paddle/2;
+	paddley=originy+height_bggame-paddlegap;
+	ballx=originx+width_bggame/2-width_ball/2;
+	bally=paddley-20;
+	// pivot point is 500, 100 meaning 0,0
+	originx=500;
+	originy=100;
+	
+	draw_totalback(originx,originy,20,20,20);
 
-	drawredb(500,300,60,20);
-	drawgreenb(500,320,60,20);
-	drawwhiteb(500,340,60,20);
-	drabdH(500,180,100,20);
-	drabdV(480,200,20,100);
-	drabdH(500,800,100,20);
-	drabdV(1100,200,20,100);
-	drawpaddle(760,750,80,20);
-	drawball(790,730,20,20);
+	drawredb(originx,originy+brickgap,width_brick,height_brick);
+	drawgreenb(originx,originy+brickgap+height_brick,width_brick,height_brick);
+	drawwhiteb(originx,originy+brickgap+2*height_brick,width_brick,height_brick);
 	
-	drawedge1(480,180,20,20);
- 	drawedge2(1100,180,20,20);
- 	drawedge3(480,800,20,20);
- 	drawedge4(1100,800,20,20);
+	drawpaddle(paddlex,paddley,width_paddle,height_paddle);
+	drawball(ballx,bally,width_ball,height_ball);
 	
-	paddlex=760;
-	paddley=750;
-	ballx=790;
-	bally=730; 
-	/*
-	int startx=600;
-	int starty=300;
-	for (int i=1; i<100;i++){
-		drawball(startx+i,starty,20,20);
-		delay(100);
-		clearball(startx+i,starty,20,20);
-	}
-	*/
+	drabdH(originx,originy-height_Hborder,width_Hborder,height_Hborder);
+	drabdV(originx-width_Vborder,originy,width_Vborder,height_Vborder);
+	drabdH(originx,originy+height_bggame,width_Hborder,height_Hborder);
+	drabdV(originx+width_bggame,originy,width_Vborder,height_Vborder);
+
 	
+	drawedge1(originx-20,originy-20,20,20);
+ 	drawedge2(originx+width_bggame,originy-20,20,20);
+ 	drawedge3(originx-20,originy+height_bggame,20,20);
+ 	drawedge4(originx+width_bggame,originy+height_bggame,20,20);
+	
+
 	int button=0xFFFF;
 	int check=0;
 	int read=0;
 	int count=0;
 	int previousbutton=0;
 	int speed=0;
+	int startball=0;
 
 	while(1){
+		
+		
+
 		while (check==0){
+			if (startball==1) moveball(ballx,bally);
 			read=readSnes();
 			//if (read != 65535) printf("%d\n",read);
 			// left button
@@ -429,6 +463,8 @@ void draw(){
 			}
 			// if B button is pressed- ball release
 			else if (read==65534){
+				//printf("x=%d y=%d\n",ballx,bally);
+				startball=1;
 				
 			}
 			// If A and right move is pressed
@@ -466,7 +502,7 @@ void draw(){
 				previousbutton=65215;	
 			}
 
-			delay(50);
+			delay(5);
 			
 		}
 		check=0;
